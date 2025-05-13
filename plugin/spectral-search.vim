@@ -71,60 +71,40 @@ enddef
 
 # Define plugin commands
 command! SpectralSearchToggle call spectral_search#Toggle()
-command! -nargs=1 -complete=customlist,spectral_search#GradientComplete 
-    \ SpectralSearchGradient call spectral_search#SetGradient(<f-args>)
-command! -nargs=1 -complete=customlist,spectral_search#IntensityComplete 
-    \ SpectralSearchIntensity call spectral_search#SetIntensity(<f-args>)
+command! -nargs=1 -complete=customlist,spectral_search#GradientComplete SpectralSearchGradient call spectral_search#SetGradient(<f-args>)
+command! -nargs=1 -complete=customlist,spectral_search#IntensityComplete SpectralSearchIntensity call spectral_search#SetIntensity(<f-args>)
 command! SpectralSearchClear call spectral_search#ClearHighlights()
 command! SpectralSearchInfo call spectral_search#ShowInfo()
 
 # Heatmap visualization commands
 command! SpectralSearchHeatmapToggle call spectral_search#ToggleHeatmap()
-command! -nargs=1 -complete=customlist,spectral_search#WidthComplete 
-    \ SpectralSearchHeatmapWidth call spectral_search#SetHeatmapWidth(<f-args>)
-command! -nargs=1 -complete=customlist,spectral_search#SegmentsComplete 
-    \ SpectralSearchHeatmapSegments call spectral_search#SetHeatmapSegments(<f-args>)
+command! -nargs=1 -complete=customlist,spectral_search#WidthComplete SpectralSearchHeatmapWidth call spectral_search#SetHeatmapWidth(<f-args>)
+command! -nargs=1 -complete=customlist,spectral_search#SegmentsComplete SpectralSearchHeatmapSegments call spectral_search#SetHeatmapSegments(<f-args>)
 command! SpectralSearchHeatmapRefresh call spectral_search#UpdateHeatmapVisualization(@/)
 
 # Create augroup for search events
 augroup SpectralSearch
     autocmd!
-    
+
     # Search handling
-    autocmd CmdlineEnter [/?] autocmd SpectralSearch CmdlineLeave [/?] ++once 
-        \ call spectral_search#ApplySpectralHighlights()
-    autocmd TextChanged,TextChangedI * 
-        \ if g:spectral_search_enabled | call spectral_search#UpdateHighlights() | endif
-    autocmd ColorScheme * 
-        \ if g:spectral_search_enabled | call spectral_search#ReapplyHighlights() | endif
-    
+    autocmd CmdlineEnter [/?] autocmd SpectralSearch CmdlineLeave [/?] ++once call spectral_search#ApplySpectralHighlights()
+    autocmd TextChanged,TextChangedI * if g:spectral_search_enabled | call spectral_search#UpdateHighlights() | endif
+    autocmd ColorScheme * if g:spectral_search_enabled | call spectral_search#ReapplyHighlights() | endif
+
     # Ensure proper window cleanup
     autocmd VimLeave * call spectral_search#ClearHighlights()
-    
+
     # Window handling for heatmap
-    autocmd VimResized * 
-        \ if exists('g:spectral_search_heatmap') && g:spectral_search_heatmap | 
-        \   call spectral_search#UpdateHeatmapVisualization(@/) | 
-        \ endif
-    
+    autocmd VimResized * if exists('g:spectral_search_heatmap') && g:spectral_search_heatmap | call spectral_search#UpdateHeatmapVisualization(@/) | endif
+
     # Buffer events for heatmap
-    autocmd BufWinEnter,WinEnter * 
-        \ if exists('g:spectral_search_heatmap') && g:spectral_search_heatmap | 
-        \   call spectral_search#UpdateHeatmapVisualization(@/) | 
-        \ endif
-    
+    autocmd BufWinEnter,WinEnter * if exists('g:spectral_search_heatmap') && g:spectral_search_heatmap | call spectral_search#UpdateHeatmapVisualization(@/) | endif
+
     # Scroll synchronization
-    autocmd CursorMoved,CursorMovedI * 
-        \ if exists('g:spectral_search_heatmap') && g:spectral_search_heatmap && 
-        \   g:spectral_search_heatmap_auto_scroll | 
-        \   call spectral_search#SyncHeatmapScroll() | 
-        \ endif
-    
+    autocmd CursorMoved,CursorMovedI * if exists('g:spectral_search_heatmap') && g:spectral_search_heatmap && g:spectral_search_heatmap_auto_scroll | call spectral_search#SyncHeatmapScroll() | endif
+
     # Window management
-    autocmd WinLeave * 
-        \ if exists('g:spectral_search_heatmap') && g:spectral_search_heatmap | 
-        \   call spectral_search#SyncHeatmapScroll() | 
-        \ endif
+    autocmd WinLeave * if exists('g:spectral_search_heatmap') && g:spectral_search_heatmap | call spectral_search#SyncHeatmapScroll() | endif
 augroup END
 
 # Initialize the plugin
@@ -132,7 +112,6 @@ call spectral_search#Initialize()
 
 # Ensure visibility of heatmap window initially if enabled
 if g:spectral_search_heatmap && @/ != ''
-    # Use proper vim9script lambda syntax
     timer_start(100, function(timer: number): void
         try
             if g:spectral_search_heatmap
