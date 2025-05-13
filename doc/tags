@@ -1,0 +1,16 @@
+:SpectralSearchClear	spectral-search.txt	/*:SpectralSearchClear*
+:SpectralSearchGradient	spectral-search.txt	/*:SpectralSearchGradient*
+:SpectralSearchInfo	spectral-search.txt	/*:SpectralSearchInfo*
+:SpectralSearchIntensity	spectral-search.txt	/*:SpectralSearchIntensity*
+:SpectralSearchToggle	spectral-search.txt	/*:SpectralSearchToggle*
+spectral-search-commands	spectral-search.txt	/*spectral-search-commands*
+spectral-search-configuration	spectral-search.txt	/*spectral-search-configuration*
+spectral-search-installation	spectral-search.txt	/*spectral-search-installation*
+spectral-search-introduction	spectral-search.txt	/*spectral-search-introduction*
+spectral-search-license	spectral-search.txt	/*spectral-search-license*
+spectral-search-statusline	spectral-search.txt	/*spectral-search-statusline*
+spectral-search-tips	spectral-search.txt	/*spectral-search-tips*
+spectral-search-toc	spectral-search.txt	/*spectral-search-toc*
+spectral-search-troubleshooting	spectral-search.txt	/*spectral-search-troubleshooting*
+spectral-search-usage	spectral-search.txt	/*spectral-search-usage*
+spectral-search.txt	spectral-search.txt	/*spectral-search.txt*
