@@ -1,0 +1,269 @@
+*spectral-search.txt*  For Vim version 8  Last change: 2025 April 29
+
+                             SPECTRAL SEARCH
+                 A spectral gradient highlighting for Vim search
+
+==============================================================================
+CONTENTS                                                 *spectral-search-toc*
+
+1. Introduction .................... |spectral-search-introduction|
+2. Installation .................... |spectral-search-installation|
+3. Usage ........................... |spectral-search-usage|
+4. Commands ........................ |spectral-search-commands|
+5. Configuration ................... |spectral-search-configuration|
+6. Status Line Integration ......... |spectral-search-statusline|
+7. Troubleshooting ................. |spectral-search-troubleshooting|
+8. Tips and Tricks ................. |spectral-search-tips|
+9. License ......................... |spectral-search-license|
+
+==============================================================================
+1. INTRODUCTION                                   *spectral-search-introduction*
+
+Spectral Search enhances Vim's native / and ? search by visually highlighting
+matches with spectral-style gradients. It's designed to help you visually
+distinguish between multiple matches using color gradients, making it easier
+to navigate through search results in large files.
+
+Features:
+- Enhances native search with spectral color gradients
+- Offers both heatmap and rainbow gradient styles
+- Custom intensity levels for highlighting
+- Status line integration for search visualization
+- Works in terminal Vim with true color or 16-color fallback support
+- Fully compatible with standard Vim (8+)
+
+==============================================================================
+2. INSTALLATION                                   *spectral-search-installation*
+
+Installation with Vim packages (Vim 8+):
+>
+  git clone https://github.com/SilentGlasses/spectral-search.git \
+    ~/.vim/pack/plugins/start/spectral-search
+<
+
+Installation with plug.vim:
+>
+  Plug 'SilentGlasses/spectral-search'
+<
+
+Installation with Vundle:
+>
+  Plugin 'SilentGlasses/spectral-search'
+<
+
+Installation with dein.vim:
+>
+  call dein#add('SilentGlasses/spectral-search')
+<
+
+Manual installation:
+>
+  # Create directory structure
+  mkdir -p ~/.vim/pack/plugins/start/spectral-search/{plugin,autoload,doc}
+  
+  # Download or copy the files
+  # Then generate help tags
+  :helptags ~/.vim/pack/plugins/start/spectral-search/doc
+<
+
+Requirements:
+- Vim 9.1 or later
+- Vim with +vim9script, +syntax, and +extra_search features
+- Terminal with true color support recommended (not required)
+
+==============================================================================
+3. USAGE                                               *spectral-search-usage*
+
+Spectral Search works automatically once installed, enhancing your normal
+search experience. Simply use Vim's standard search commands:
+
+- Press / to search forward
+- Press ? to search backward
+- Press n to go to the next match
+- Press N to go to the previous match
+
+All matches will be highlighted with a spectral gradient, with early matches
+using one end of the color spectrum and later matches using the other end.
+
+For example, in the default heatmap mode:
+- First matches appear in blue
+- Middle matches transition through green/yellow
+- Last matches appear in red
+
+Toggle the feature on/off:
+>
+  :SpectralSearchToggle
+<
+
+Change the gradient style (heat or rainbow):
+>
+  :SpectralSearchGradient heat
+  :SpectralSearchGradient rainbow
+<
+
+Change the intensity (low, medium, high):
+>
+  :SpectralSearchIntensity low
+  :SpectralSearchIntensity medium
+  :SpectralSearchIntensity high
+<
+
+Clear all spectral highlights:
+>
+  :SpectralSearchClear
+<
+
+Show information about the current settings:
+>
+  :SpectralSearchInfo
+<
+
+==============================================================================
+4. COMMANDS                                         *spectral-search-commands*
+
+                                                     *:SpectralSearchToggle*
+:SpectralSearchToggle
+    Toggle spectral search highlighting on/off.
+
+                                                     *:SpectralSearchGradient*
+:SpectralSearchGradient {style}
+    Set the gradient style. Options:
+    - heat: Blue to red heatmap (default)
+    - rainbow: Rainbow spectrum
+
+                                                     *:SpectralSearchIntensity*
+:SpectralSearchIntensity {level}
+    Set the color intensity. Options:
+    - low: Subtle colors
+    - medium: Standard colors (default)
+    - high: Intense colors
+
+                                                     *:SpectralSearchClear*
+:SpectralSearchClear
+    Clear all spectral search highlights.
+
+                                                     *:SpectralSearchInfo*
+:SpectralSearchInfo
+    Display information about the current settings.
+
+==============================================================================
+5. CONFIGURATION                                 *spectral-search-configuration*
+
+You can customize Spectral Search by adding the following settings to your
+vimrc file:
+
+Enable/disable the plugin (default: 1 - enabled)
+>
+  let g:spectral_search_enabled = 1
+<
+
+Set the default gradient style (default: 'heat')
+>
+  let g:spectral_search_gradient = 'heat'  " Options: 'heat', 'rainbow'
+<
+
+Set the default intensity (default: 'medium')
+>
+  let g:spectral_search_intensity = 'medium'  " Options: 'low', 'medium', 'high'
+<
+
+Set the maximum number of matches to highlight (default: 100)
+>
+  let g:spectral_search_max_matches = 100
+<
+
+==============================================================================
+6. STATUS LINE INTEGRATION                         *spectral-search-statusline*
+
+Spectral Search provides a function for status line integration. Add this to
+your status line configuration:
+
+For standard status line:
+>
+  set statusline+=\ %{g:SpectralSearchStatusline()}
+<
+
+For lightline.vim:
+>
+  let g:lightline = {
+    \ 'active': {
+    \   'right': [ [ 'lineinfo' ],
+    \              [ 'percent', 'spectral_search' ],
+    \              [ 'fileformat', 'fileencoding', 'filetype' ] ]
+    \ },
+    \ 'component_function': {
+    \   'spectral_search': 'g:SpectralSearchStatusline',
+    \ }
+    \ }
+<
+
+==============================================================================
+7. TROUBLESHOOTING                             *spectral-search-troubleshooting*
+
+Issue: Colors don't appear or look wrong
+Solutions:
+- Ensure your terminal supports true colors
+- Add `set termguicolors` to your vimrc
+- If your terminal doesn't support true colors, the plugin will use a fallback
+  color scheme with basic terminal colors
+
+Issue: Plugin doesn't work
+Solutions:
+- Check Vim version with `:version` (must be 9.1+)
+- Ensure Vim has +vim9script, +syntax, and +extra_search features
+- Run `:SpectralSearchInfo` to check the plugin status
+- Ensure the plugin is correctly installed
+
+Issue: Performance issues with large files
+Solutions:
+- Reduce `g:spectral_search_max_matches` to limit the number of highlighted matches
+- Use `:SpectralSearchToggle` to temporarily disable the plugin when not needed
+- Ensure you're using a specific search pattern to limit matches
+
+Issue: Conflict with other search plugins
+Solutions:
+- Load Spectral Search after other search-related plugins
+- Try disabling other search highlight plugins temporarily
+- Check if other plugins are using matchadd() with similar priorities
+
+==============================================================================
+8. TIPS AND TRICKS                                     *spectral-search-tips*
+
+Searching with count prefixes:
+- While spectral search shows all matches, you can still use Vim's count prefix
+  with search commands: `3/pattern` will place the cursor at the 3rd occurrence
+  of pattern.
+
+Optimal search patterns:
+- More specific search patterns will yield better visual results with fewer
+  matches to highlight
+- Use `\v` (very magic) for cleaner regular expressions: `/\vpattern`
+
+Key mappings:
+- Create a key mapping to toggle the spectral search:
+>
+  nnoremap <leader>st :SpectralSearchToggle<CR>
+<
+
+- Create mappings for different gradient styles:
+>
+  nnoremap <leader>sh :SpectralSearchGradient heat<CR>
+  nnoremap <leader>sr :SpectralSearchGradient rainbow<CR>
+<
+
+Using with incsearch:
+- Spectral Search works great with Vim's `incsearch` option, showing the
+  gradient highlighting as you type your search pattern
+>
+  set incsearch
+<
+
+==============================================================================
+9. LICENSE                                           *spectral-search-license*
+
+Spectral Search is released under the Vim license.
+See |license| for more information.
+
+==============================================================================
+ vim:tw=78:ts=8:ft=help:norl:
+
